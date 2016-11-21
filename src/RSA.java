@@ -46,14 +46,22 @@ public class RSA {
         return sb.toString();
     }
 
-    private String encrypt(String message, BigInteger[] publicKey)
+    public String cypherWithPrivateKey(String message)
     {
-        BigInteger n = publicKey[0];
-        BigInteger e = publicKey[1];
-        return (new BigInteger(message.getBytes())).modPow(e, n).toString();
+        return cypher(message, privateKey());
+    }
+
+    public String decypherWithPrivateKey(String message)
+    {
+        return decypher(message, privateKey());
     }
 
     public String decypher(String message)
+    {
+        return decypher(message, getPublicKey());
+    }
+
+    public String decypher(String message, BigInteger[] publicKey)
     {
         StringBuilder sb = new StringBuilder();
 
@@ -61,13 +69,25 @@ public class RSA {
 
         for (String m: ms)
         {
-            sb.append(decrypt(m));
+            sb.append(decrypt(m, publicKey));
         }
         return sb.toString();
     }
 
-    private String decrypt(String message) {
-        return new String((new BigInteger(message)).modPow(d, n).toByteArray());
+    private String encrypt(String message, BigInteger[] key)
+    {
+        BigInteger modulo = key[0];
+        BigInteger exponent = key[1];
+
+        return (new BigInteger(message.getBytes())).modPow(exponent, modulo).toString();
+    }
+
+    private String decrypt(String message, BigInteger[] key)
+    {
+        BigInteger modulo = key[0];
+        BigInteger exponent = key[1];
+
+        return new String((new BigInteger(message)).modPow(exponent, modulo).toByteArray());
     }
 
     public void generateKeys()
@@ -91,5 +111,9 @@ public class RSA {
 
     public BigInteger[] getPublicKey() {
         return new BigInteger[]{this.n, this.e};
+    }
+
+    private BigInteger[] privateKey() {
+        return new BigInteger[]{this.n, this.d};
     }
 }
