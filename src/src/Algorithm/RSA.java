@@ -1,3 +1,5 @@
+package Algorithm;
+
 /**
  * Created by Marcelo d'Almeida on 11/20/2016.
  */
@@ -21,7 +23,7 @@ public class RSA {
 
     public String cypher(String message)
     {
-        return cypher(message, getPublicKey());
+        return cypher(message, privateKey());
     }
 
     public String cypher(String message, BigInteger[] publicKey)
@@ -46,19 +48,9 @@ public class RSA {
         return sb.toString();
     }
 
-    public String cypherWithPrivateKey(String message)
-    {
-        return cypher(message, privateKey());
-    }
-
-    public String decypherWithPrivateKey(String message)
-    {
-        return decypher(message, privateKey());
-    }
-
     public String decypher(String message)
     {
-        return decypher(message, getPublicKey());
+        return decypher(message, privateKey());
     }
 
     public String decypher(String message, BigInteger[] publicKey)
